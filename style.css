@@ -1,0 +1,161 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-size: 18px;
+    font-family: sans-serif;
+}
+
+html{
+	background: #E5E5E5;
+}
+
+/* Header Styles */
+header{
+	display: flex;
+    justify-content: space-between;
+    background: #FFFFFF;
+    padding: 20px;
+    align-items: center;
+    box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+}
+
+header nav li, header div * {
+    display: inline-block;
+}
+
+header > nav{
+	    transform: translateX(20%);
+}
+
+header nav > ul > li > a{
+	    font-size: 18px;
+    color: #65676B;
+    text-decoration: none;
+    font-family: sans-serif;
+    margin-right: 18px;
+}
+
+.userMenu > *, .rightMenu > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.notifContainer{
+	position: relative;
+}
+
+.notif {
+	display: none;
+    /*display: block;*/
+    position: absolute;
+    background: #fff;
+    right: 50%;
+    transform: translateX(50%);
+    top: 100%;
+    min-width: 200px;
+    padding: 1em;
+    box-shadow: 0 6px 10px 5px rgb(0 0 0 / 20%);
+    border-radius: 3px;
+}
+.notif * {
+    display: block;   
+}
+
+.notifContainer {
+    position: relative;
+    margin-right: 30px;
+}
+
+.bellIcon {
+    border: solid 1px #e5e7eb;
+    border-radius: 50%;
+    padding: 5px 8px;
+    cursor: pointer;
+}
+
+.bellIcon:hover {
+    background: #e5e7eb;
+}
+
+/* Main content styles */
+body > section > section > *, body > section > aside{
+    background: #fff;
+    padding: 18px;
+    margin: 18px 0;
+    border-radius: 3px;
+}
+
+body > section > section{
+	width: 75vw;
+}
+
+body > section > aside{
+	    margin-left: 20px;
+}
+
+body > section {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.search {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
+
+.search >img {
+    margin-right: 25px;
+    margin-left: 10px;
+    margin-top:  9px;
+}
+.search > form{
+	min-height: 45px;
+    width: 100%;
+}
+.search > form > textarea {
+    height: 45px;
+     resize:vertical;
+    max-width: 100%;
+    width: 100%;
+    border-radius: 3px;
+    border: solid 2px #c5c5c5;
+    padding: 10px 10px;
+}
+
+button.contentButton {
+	display: none;
+    float: right;
+    height: 40px;
+    width: 150px;
+    margin-top: 15px;
+    border-radius: 3px;
+    background: #0a91bb;
+    border: solid 2px transparent;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+img#userProfileImg {
+    border-radius: 30px;
+}
+
+button.contentButton:hover {
+	background: transparent;
+    border: solid 2px #3fc9f3;
+    color: #3fc9f3;
+}
+
+.hide {
+    position: relative;
+    left: -110%;
+    transition: left 0.5s ease;
+}
+
+.show {
+    left: 0;
+}

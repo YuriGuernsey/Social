@@ -92,6 +92,7 @@ body > section > section{
 
 body > section > aside{
 	    margin-left: 20px;
+        width: 20vw;
 }
 
 body > section {
@@ -158,4 +159,23 @@ button.contentButton:hover {
 
 .show {
     left: 0;
+}
+
+.bottomBar > button {
+    width: 10vw;
+    margin: 20\px 15px 0 0;
+    border: solid 3px transparent;
+    border-radius: 3px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.bottomBar > button:hover{
+    opacity: 0.8;
+}
+
+button.likeBTN {
+    background: #0aa4ff;
+    color: #fff;
+    overflow: hidden;
 }

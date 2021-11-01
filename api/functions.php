@@ -69,7 +69,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 	if (isset($_POST['content'])) {
 		$content = ($_POST['content']);
 		$user = $_SESSION['userName'];
-		$sql = "INSERT INTO `Posts`(`ID`, `Content`, `Images`, `UserName` , `DateCreated`) VALUES (null, '$content' , null, '$user' , now())";
+		$sql = "INSERT INTO `Posts`(`ID`, `Content`, `Images`, `UserName` , `Likes`, `DateCreated`) VALUES (null, '$content' , null, '$user' , 0 , now())";
 
 		if ($mysqli->query($sql) === TRUE) {
 		  echo "New record created successfully";
@@ -79,15 +79,41 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
 	}
 
 	if (isset($_POST['getPosts'])) {
-		$result = $mysqli->query("SELECT * FROM `Posts`");
+		$result = $mysqli->query("SELECT `Posts`.*, `Users`.`Email` FROM `Posts` INNER JOIN `Users` ON Posts.`UserName` = Users.`UserName`");
 		$Posts = array();
 		 while ( $row = $result->fetch_assoc())  {
+		 	$row['Email'] =  md5( strtolower( trim( $row['Email']  ) ) );
+
 			$Posts[]=$row;
 		  }
 		$revPosts = array_reverse($Posts);
 		   echo json_encode($revPosts);
 	}
 
+
+if (isset($_POST['getPOPPosts'])) {
+		$result = $mysqli->query("SELECT `Posts`.*, `Users`.`Email` FROM `Posts` INNER JOIN `Users` ON Posts.`UserName` = Users.`UserName` ORDER BY `Likes` DESC ");
+		$Posts = array();
+		 while ( $row = $result->fetch_assoc())  {
+		 	$row['Email'] =  md5( strtolower( trim( $row['Email']  ) ) );
+
+			$Posts[]=$row;
+		  }
+		   echo json_encode($Posts);
+	}
+
+	if (isset($_POST['postLiked'])) {
+
+		$postID = $_POST['postID'];
+
+		$sql = ("UPDATE `Posts` SET `Likes`= `Likes` + 1  WHERE `ID` = $postID");
+		
+		if ($mysqli->query($sql) === TRUE) {
+		  echo "New record created successfully";
+		} else {
+		  echo "Error: " . $sql . "<br>" . $mysqli->error;
+		}
+	}
 
 
 } 

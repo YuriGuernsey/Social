@@ -83,24 +83,33 @@ $(document).ready(function(){
         success: function(response) { 
               var profileJson =  JSON.parse(response);
               $('img#userProfileImg').attr('src', profileJson.profileImg);
-              $(".userMenu > p").text(profileJson.username)
+              $(".userMenu > p").text(profileJson.username  )
          }
     });
 
-$.ajax({
+
+           $.ajax({
         url: DIR + 'functions.php',
         type: 'POST',
         data: { "getPosts":'true' },
         success: function(response) { 
-             
+           
               var postsJson =  JSON.parse(response);
+             
               if(postsJson.length < 1)
                      {
                                var contentHTML = " <div class='contatiner' id='content'><div class='contentContatiner' ><p> No Content </p></div></div>";
 $("#contentSection").append(contentHTML);
                      }else{
               for(var i = 0; i < postsJson.length; i++){
-                        var contentHTML = " <div class='contatiner hide' id='content'><div class='contentContatiner' ><div class='topBar'><div class='user'>@"+ postsJson[i].UserName +"</div><div class='actionBtn'></div></div><div class='content'><p>"+ postsJson[i].Content + "</p></div><div class='bottomBar'>Comment button and reaction button</div></div>";
+var likesBtnCnt;
+              
+                     if(postsJson[i].Likes > 1){
+                           likesBtnCnt= "<span>"+postsJson[i].Likes+"</span> Likes";
+                     }else{
+likesBtnCnt= "<span>"+postsJson[i].Likes+"</span> Like";
+                     }
+                        var contentHTML = " <div class='contatiner hide' id='content'><div class='contentContatiner' ><div class='topBar'><div class='user'><img id='userProfileImg' src='https://www.gravatar.com/avatar/" + postsJson[i].Email +"?s=40'>@"+ postsJson[i].UserName +"</div><div class='actionBtn'></div></div><div class='content'><p>"+ postsJson[i].Content + "</p></div><div class='bottomBar'><button>Comment</button><button data-postID=" + postsJson[i].ID +" class='likeBTN' onClick='likePost(this)'>" +likesBtnCnt +"</button></div></div>";
 $("#contentSection").append(contentHTML);
               }
               $("div[id*='content']").each(function (i, el) {
@@ -111,10 +120,52 @@ $("#contentSection").append(contentHTML);
        }
          }
     });
+   
 
-              
+
+   $.ajax({
+        url: DIR + 'functions.php',
+        type: 'POST',
+        data: { "getPOPPosts":'true' },
+        success: function(response) { 
+           
+              var postsJson =  JSON.parse(response);
+              console.log(postsJson);
+            if(postsJson.length < 1)
+                     {
+                               var contentHTML = "<div><p>No trending posts</p></div>";
+$("body > section > aside").append(contentHTML);
+                     }else{
+              for(var i = 0; i < 3; i++){
+                     var today = new Date();
+var datePosted = new Date(postsJson[i].DateCreated);
+var diffMs = (today - datePosted); 
+var diffDays = Math.floor(diffMs / 86400000); // days
+var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+var timegone;
+if(diffDays >= 30){
+    timegone =  postsJson[i].DateCreated;
+}
+if(diffDays >= 1){
+    timegone =  diffDays + ' days ago';
+}
+if(diffHrs >= 1 && diffDays < 1){
+       timegone =  diffHrs + ' hours ago';
+}
+if(diffMins >= 1 && diffHrs < 1 && diffDays < 1){
+       timegone =  diffMins + ' mins ago';
+}
+                        var contentHTML = "<div><h3>"+postsJson[i].Content+"</h3><div><p>@"+postsJson[i].UserName+"</p><p>"+ timegone +" </p> </div></div><br />";
+$("body > section > aside").append(contentHTML);
+              }
+       }
+         }
+    });
+
       
-      });
+});
 
 
 function checkUserLogin(){
@@ -129,6 +180,25 @@ function checkUserLogin(){
            }
 
       
+         }
+    });
+}
+
+
+function likePost(el){
+         console.log($(el).attr('data-postid'));
+ $.ajax({
+        url: DIR + 'functions.php',
+        type: 'POST',
+        data: { "postLiked":'true', "postID": $(el).attr('data-postID')},
+        success: function(response) { 
+
+              var currentLikes = parseInt($(el).children('span').text());
+              var updatedLikes = currentLikes += 1;
+              if(updatedLikes > 1){
+                      $(el).html('<span>' +updatedLikes+'</span> Likes');
+              }
+       $(el).children('span').text(updatedLikes.toString());
          }
     });
 }
